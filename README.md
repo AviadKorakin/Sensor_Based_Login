@@ -45,10 +45,11 @@ Welcome to the **SensorBasedLogin** project! This innovative Android application
 ## 🎥 Demo Video
 
 <p align="center">
-  <a href="https://www.youtube.com/watch?v=3oevWQ_c_Kc">
-    <img src="https://img.youtube.com/vi/3oevWQ_c_Kc/0.jpg" alt="SensorBasedLogin Demo" style="width:60%; height:auto;">
+  <a href="https://www.youtube.com/shorts/Oa5-ng-zLXc">
+    <img src="https://img.youtube.com/vi/Oa5-ng-zLXc/0.jpg" alt="SensorBasedLogin Demo" style="width:60%; height:auto;">
   </a>
 </p>
+
 
 ---
 
