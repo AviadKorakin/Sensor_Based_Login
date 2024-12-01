@@ -2,6 +2,7 @@ package com.sensorbasedlogin;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.KeyguardManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -22,6 +23,7 @@ import android.graphics.Canvas;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricManager;
 import androidx.core.content.ContextCompat;
@@ -68,6 +70,23 @@ public class MainActivity extends AppCompatActivity {
                     handleQRCodeResult(null);
                 }
             });
+
+    private final ActivityResultLauncher<Intent> deviceCredentialLauncher = registerForActivityResult(
+        new ActivityResultContracts.StartActivityForResult(),
+    result -> {
+        if (result.getResultCode() == RESULT_OK) {
+            // Authentication succeeded
+            isBiometricsValid = true;
+            binding.layoutBiometric.setBackgroundResource(R.drawable.circle_green);
+            binding.instructionText.setText("Device credential validated successfully!");
+        } else {
+            // Authentication failed or was canceled
+            isBiometricsValid = false;
+            binding.layoutBiometric.setBackgroundResource(R.drawable.circle_red);
+            binding.instructionText.setText("Device credential authentication failed or canceled.");
+        }
+    }
+    );
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -290,7 +309,7 @@ public class MainActivity extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     private void validateBiometric() {
         // Initialize the BiometricManager to check for biometric authentication support
-        BiometricManager biometricManager = BiometricManager.from(this);
+       BiometricManager biometricManager = BiometricManager.from(this);
 
         // Check if the device supports strong biometric authentication (e.g., fingerprint, face recognition)
         if (biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG)
@@ -350,17 +369,30 @@ public class MainActivity extends AppCompatActivity {
             biometricPrompt.authenticate(promptInfo);
 
         } else {
-            // If the device does not support biometric authentication or no biometrics are enrolled:
-
-            // Set the biometric task as invalid
-            isBiometricsValid = false;
-
-            // Update the UI to indicate lack of biometric support or enrollment
-            binding.layoutBiometric.setBackgroundResource(R.drawable.circle_red);
-            binding.instructionText.setText("No biometric hardware or enrolled biometrics found.");
+            // If the device does not support biometric authentication or no biometrics are enrolled
+            fallbackToPIN();
         }
     }
 
+    @SuppressLint("SetTextI18n")
+    private void fallbackToPIN() {
+        // Use KeyguardManager for fallback to device credential
+        KeyguardManager keyguardManager = (KeyguardManager) getSystemService(KEYGUARD_SERVICE);
+
+        if (keyguardManager.isDeviceSecure()) { // Check if the device has a secure credential set up
+            Intent intent = keyguardManager.createConfirmDeviceCredentialIntent(
+                    "Device Authentication Required",
+                    "Authenticate using your PIN, password, or pattern"
+            );
+
+            if (intent != null) {
+                deviceCredentialLauncher.launch(intent); // Launch the authentication activity
+            }
+        } else {
+            // Inform the user that no secure credentials are set up
+            binding.instructionText.setText("No device credentials (PIN, password, or pattern) are set up.");
+        }
+    }
     @SuppressLint("SetTextI18n")
     private void validateWifiConnection() {
         if (connectivityManager != null && wifiManager != null) {
@@ -405,7 +437,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     @SuppressLint("SetTextI18n")
     private void validateDarkPlace() {
         binding.instructionText.setText("Move to a darker place.");
@@ -420,12 +451,22 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 102 && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            validateWifiConnection(); // Retry fetching SSID if permission granted
-        } else {
-            Toast.makeText(this, "Location permission required to validate Wi-Fi connection.", Toast.LENGTH_SHORT).show();
+
+        if (requestCode == 101) { // Camera permission request
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "Camera permission granted.", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Camera permission is required to scan QR codes.", Toast.LENGTH_SHORT).show();
+            }
+        } else if (requestCode == 102) { // Location permission request
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                validateWifiConnection(); // Retry fetching SSID if permission granted
+            } else {
+                Toast.makeText(this, "Location permission required to validate Wi-Fi connection.", Toast.LENGTH_SHORT).show();
+            }
         }
     }
+
 
     @Override
     protected void onResume() {
@@ -436,6 +477,25 @@ public class MainActivity extends AppCompatActivity {
         }
         if (lightSensor != null) {
             sensorManager.registerListener(lightEventListener, lightSensor, SensorManager.SENSOR_DELAY_UI);
+        }
+    }
+    @SuppressLint("SetTextI18n")
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1001) { // Check for the PIN authentication request
+            if (resultCode == RESULT_OK) {
+                // Authentication succeeded
+                isBiometricsValid = true;
+                binding.layoutBiometric.setBackgroundResource(R.drawable.circle_green);
+                binding.instructionText.setText("Device credential validated successfully!");
+            } else {
+                // Authentication failed or was canceled
+                isBiometricsValid = false;
+                binding.layoutBiometric.setBackgroundResource(R.drawable.circle_red);
+                binding.instructionText.setText("Device credential authentication failed.");
+            }
         }
     }
 
