@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary color for buttons and icons -->
+    <color name="primary">#FF6750A3</color>
+    <!-- Gray color for inactive icons -->
+    <color name="gray">#BDBDBD</color>
+    <!-- Black for text -->
+    <color name="black">#000000</color>
+    <!-- White for text and background -->
+    <color name="white">#FFFFFF</color>
+</resources>

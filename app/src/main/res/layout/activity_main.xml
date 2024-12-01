@@ -1,0 +1,195 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".MainActivity">
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sensor_based_login"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginTop="24dp"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/black" />
+
+    <!-- Instructions Box -->
+    <LinearLayout
+        android:id="@+id/instructionsBox"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title"
+        android:layout_margin="16dp"
+        android:padding="16dp"
+        android:background="@drawable/instruction_background"
+        android:elevation="4dp"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:id="@+id/instructionText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/click_a_step_to_see_the_instructions"
+            android:textSize="16sp"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/black" />
+    </LinearLayout>
+
+    <!-- Steps Section -->
+    <LinearLayout
+        android:id="@+id/stepsLayout"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/instructionsBox"
+        android:layout_marginTop="16dp"
+        android:gravity="center_horizontal"
+        android:padding="16dp">
+
+        <!-- Barcode and Fingerprint Horizontal Row -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:gravity="center">
+
+            <!-- Barcode Button -->
+            <LinearLayout
+                android:id="@+id/layout_barcode"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:gravity="center"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/circle_red"
+                android:clickable="true"
+                android:focusable="true">
+                <ImageView
+                    android:id="@+id/icon_barcode"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:contentDescription="TODO"
+                    android:src="@drawable/ic_barcode" />
+            </LinearLayout>
+
+            <!-- Biometric Button -->
+            <LinearLayout
+                android:id="@+id/layout_biometric"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:gravity="center"
+                android:layout_marginStart="16dp"
+                android:background="@drawable/circle_red"
+                android:clickable="true"
+                android:focusable="true">
+                <ImageView
+                    android:id="@+id/icon_biometric"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_biometric" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Shake and Wi-Fi Horizontal Row -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:gravity="center">
+
+            <!-- Shake Button -->
+            <LinearLayout
+                android:id="@+id/layout_shake"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:gravity="center"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/circle_red"
+                android:clickable="true"
+                android:focusable="true">
+                <ImageView
+                    android:id="@+id/icon_shake"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_shake" />
+            </LinearLayout>
+
+            <!-- Wi-Fi Button -->
+            <LinearLayout
+                android:id="@+id/layout_wifi"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:gravity="center"
+                android:layout_marginStart="16dp"
+                android:background="@drawable/circle_red"
+                android:clickable="true"
+                android:focusable="true">
+                <ImageView
+                    android:id="@+id/icon_wifi"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_wifi" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Stay in Dark Place Horizontal Row -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:gravity="center">
+
+            <!-- Stay in Dark Place Button -->
+            <LinearLayout
+                android:id="@+id/layout_dark_place"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:gravity="center"
+                android:background="@drawable/circle_red"
+                android:clickable="true"
+                android:focusable="true">
+                <ImageView
+                    android:id="@+id/icon_dark_place"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_dark_place" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Slide-to-Login Section -->
+    <TextView
+        android:id="@+id/sliderLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Slide to Login"
+        android:layout_above="@+id/slider_login"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="8dp"
+        android:textSize="18sp"
+        android:textColor="@color/black" />
+
+    <SeekBar
+        android:id="@+id/slider_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="16dp"
+        android:padding="8dp"
+        android:max="100"
+        android:progress="4"
+        android:enabled="false"
+        android:thumbTint="@null"
+        android:progressTint="@color/primary"
+        android:progressBackgroundTint="@color/gray" />
+
+</RelativeLayout>

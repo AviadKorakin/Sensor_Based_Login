@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">SensorBasedLogin</string>
+    <string name="scanning">Scanning...</string>
+    <string name="align_the_qr_code_within_the_square">Align the QR code within the square</string>
+    <string name="todo">TODO</string>
+    <string name="sensor_based_login">Sensor-Based Login</string>
+    <string name="click_a_step_to_see_the_instructions">Click a step to see the instructions</string>
+</resources>
